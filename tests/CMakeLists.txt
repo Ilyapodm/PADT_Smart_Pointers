@@ -14,4 +14,5 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)  # download, plug it's CMakeLists.txt in
 # after that several targets appear: GTest::gtest and GTest::gtest_main
 
+add_subdirectory(utils)
 add_subdirectory(functional)

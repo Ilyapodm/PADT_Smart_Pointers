@@ -3,6 +3,7 @@ add_executable(functional_tests test_unique_ptr.cpp)
 target_link_libraries(functional_tests
     PRIVATE
         PADT::smart_pointers
+        test_utils
         GTest::gtest_main
 )
 
