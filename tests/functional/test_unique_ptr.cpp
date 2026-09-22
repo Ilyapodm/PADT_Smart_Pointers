@@ -8,7 +8,7 @@
 namespace {
 
 // Fixture before the test
-class UniquePtrTest : public testing::Test {
+class UniquePtrLifetimeTest : public testing::Test {
 protected:
     void SetUp() override {
         test_utils::LifetimeCounter::reset_counters();
@@ -16,14 +16,14 @@ protected:
 };
 
 // use TEST_F for fixtures
-TEST_F(UniquePtrTest, DefaultConstructedPointerIsEmpty) {
+TEST(UniquePtrTest, DefaultConstructedPointerIsEmpty) {
     UniquePtr<int> pointer;
 
     EXPECT_EQ(pointer.get(), nullptr);
     EXPECT_FALSE(pointer);
 }
 
-TEST_F(UniquePtrTest, ConstructedPointerOwnsObject) {
+TEST(UniquePtrTest, ConstructedPointerOwnsObject) {
     UniquePtr<int> pointer(new int(42));
 
     ASSERT_TRUE(pointer);
@@ -31,7 +31,7 @@ TEST_F(UniquePtrTest, ConstructedPointerOwnsObject) {
     EXPECT_EQ(*pointer, 42);
 }
 
-TEST_F(UniquePtrTest, ArrowOperatorProvidesObjectAccess) {
+TEST(UniquePtrTest, ArrowOperatorProvidesObjectAccess) {
     struct Value {
         int number;
     };
@@ -41,7 +41,7 @@ TEST_F(UniquePtrTest, ArrowOperatorProvidesObjectAccess) {
     EXPECT_EQ(pointer->number, 17);
 }
 
-TEST_F(UniquePtrTest, OwnedObjectIsDestroyedWithPointer) {
+TEST_F(UniquePtrLifetimeTest, OwnedObjectIsDestroyedWithPointer) {
     {
         UniquePtr<test_utils::LifetimeCounter> pointer(new test_utils::LifetimeCounter);
 
@@ -54,7 +54,7 @@ TEST_F(UniquePtrTest, OwnedObjectIsDestroyedWithPointer) {
     EXPECT_EQ(test_utils::LifetimeCounter::alive, 0);
 }
 
-TEST_F(UniquePtrTest, MoveTransfersOwnership) {
+TEST_F(UniquePtrLifetimeTest, MoveTransfersOwnership) {
     UniquePtr<test_utils::LifetimeCounter> source(new test_utils::LifetimeCounter);
     test_utils::LifetimeCounter* raw_pointer = source.get();
 
@@ -65,7 +65,7 @@ TEST_F(UniquePtrTest, MoveTransfersOwnership) {
     EXPECT_EQ(test_utils::LifetimeCounter::alive, 1);
 }
 
-TEST_F(UniquePtrTest, MoveAssignmentDestroysOldObject) {
+TEST_F(UniquePtrLifetimeTest, MoveAssignmentDestroysOldObject) {
     UniquePtr<test_utils::LifetimeCounter> source(new test_utils::LifetimeCounter);
     UniquePtr<test_utils::LifetimeCounter> destination(new test_utils::LifetimeCounter);
     test_utils::LifetimeCounter* source_pointer = source.get();
@@ -78,7 +78,7 @@ TEST_F(UniquePtrTest, MoveAssignmentDestroysOldObject) {
     EXPECT_EQ(test_utils::LifetimeCounter::alive, 1);
 }
 
-TEST_F(UniquePtrTest, ReleaseReturnsObjectWithoutDestroyingIt) {
+TEST_F(UniquePtrLifetimeTest, ReleaseReturnsObjectWithoutDestroyingIt) {
     UniquePtr<test_utils::LifetimeCounter> pointer(new test_utils::LifetimeCounter);
 
     test_utils::LifetimeCounter* released = pointer.release();
@@ -93,7 +93,7 @@ TEST_F(UniquePtrTest, ReleaseReturnsObjectWithoutDestroyingIt) {
     EXPECT_EQ(test_utils::LifetimeCounter::alive, 0);
 }
 
-TEST_F(UniquePtrTest, ResetReplacesAndDestroysOwnedObject) {
+TEST_F(UniquePtrLifetimeTest, ResetReplacesAndDestroysOwnedObject) {
     UniquePtr<test_utils::LifetimeCounter> pointer(new test_utils::LifetimeCounter);
     test_utils::LifetimeCounter* replacement = new test_utils::LifetimeCounter;
 
@@ -109,7 +109,7 @@ TEST_F(UniquePtrTest, ResetReplacesAndDestroysOwnedObject) {
     EXPECT_EQ(test_utils::LifetimeCounter::alive, 0);
 }
 
-TEST_F(UniquePtrTest, ResetWithSamePointerKeepsObjectAlive) {
+TEST_F(UniquePtrLifetimeTest, ResetWithSamePointerKeepsObjectAlive) {
     UniquePtr<test_utils::LifetimeCounter> pointer(new test_utils::LifetimeCounter);
     test_utils::LifetimeCounter* raw_pointer = pointer.get();
 
@@ -121,7 +121,7 @@ TEST_F(UniquePtrTest, ResetWithSamePointerKeepsObjectAlive) {
     EXPECT_EQ(test_utils::LifetimeCounter::alive, 1);
 }
 
-TEST_F(UniquePtrTest, SwapExchangesOwnedObjects) {
+TEST(UniquePtrTest, SwapExchangesOwnedObjects) {
     UniquePtr<int> first(new int(10));
     UniquePtr<int> second(new int(20));
     int* first_pointer = first.get();
@@ -135,7 +135,7 @@ TEST_F(UniquePtrTest, SwapExchangesOwnedObjects) {
     EXPECT_EQ(*second, 10);
 }
 
-TEST_F(UniquePtrTest, ArraySpecializationProvidesIndexedAccess) {
+TEST(UniquePtrTest, ArraySpecializationProvidesIndexedAccess) {
     UniquePtr<int[]> pointer(new int[3]{4, 5, 6});
 
     ASSERT_TRUE(pointer);
@@ -147,7 +147,7 @@ TEST_F(UniquePtrTest, ArraySpecializationProvidesIndexedAccess) {
     EXPECT_EQ(pointer[1], 50);
 }
 
-TEST_F(UniquePtrTest, ArraySpecializationDestroysEveryObject) {
+TEST_F(UniquePtrLifetimeTest, ArraySpecializationDestroysEveryObject) {
     {
         UniquePtr<test_utils::LifetimeCounter[]> pointer(new test_utils::LifetimeCounter[3]);
 
@@ -159,7 +159,7 @@ TEST_F(UniquePtrTest, ArraySpecializationDestroysEveryObject) {
     EXPECT_EQ(test_utils::LifetimeCounter::alive, 0);
 }
 
-TEST_F(UniquePtrTest, ArrayReleaseAndResetManageOwnership) {
+TEST_F(UniquePtrLifetimeTest, ArrayReleaseAndResetManageOwnership) {
     UniquePtr<test_utils::LifetimeCounter[]> pointer(new test_utils::LifetimeCounter[2]);
 
     test_utils::LifetimeCounter* released = pointer.release();
