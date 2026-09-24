@@ -1,4 +1,4 @@
-add_executable(functional_tests test_unique_ptr.cpp)
+add_executable(functional_tests test_unique_ptr.cpp test_shared_ptr.cpp)
 
 target_link_libraries(functional_tests
     PRIVATE

@@ -150,7 +150,7 @@ public:
         }
     }
 
-    SharedPtr<T>& operator=(const SharedPtr<T[]>& other) {
+    SharedPtr<T[]>& operator=(const SharedPtr<T[]>& other) {
         if (this != &other) {
             // this may already own an object, so release the current ownership first
             release_ownership();
@@ -170,7 +170,7 @@ public:
         // don't need to increase count, because we "move" (just change the owner), don't copy
     }
 
-    SharedPtr<T>& operator=(SharedPtr<T[]>&& other) noexcept {
+    SharedPtr<T[]>& operator=(SharedPtr<T[]>&& other) noexcept {
         if (this != &other) {
             release_ownership();
             
