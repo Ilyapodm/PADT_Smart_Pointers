@@ -33,6 +33,8 @@
 
 Why don't use exceptions in UniquePtr? - UniquePtr is a **thin** wrapper of the raw pointer, so user have to use it like raw pointer (carefully) 
 
+Новый SharedPtr из raw pointer создаёт новую группу владения. Чтобы присоединиться к существующей группе, нужно копировать сам SharedPtr.
+
 ### Template Specializations
 
 ### Ownership Model
