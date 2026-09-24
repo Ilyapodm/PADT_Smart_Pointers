@@ -1,3 +1,4 @@
+#pragma once
 #include <cstddef>
 #include <new>
 
@@ -39,6 +40,7 @@ public:
         return *this;
     }
 
+    // TODO написать для наследующихся классов
     SharedPtr(SharedPtr<T>&& other) noexcept : ptr{other.ptr}, count{other.count} {
         other.ptr = nullptr;
         other.count = nullptr;

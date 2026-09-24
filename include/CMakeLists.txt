@@ -16,4 +16,5 @@ target_sources(smart_pointers
     INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/unique_ptr.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/shared_ptr.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/dynamic_array.hpp
 )

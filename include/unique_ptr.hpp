@@ -1,3 +1,4 @@
+#pragma once
 #include <cstddef>
 
 template <typename T>
@@ -79,6 +80,7 @@ public:
     UniquePtr(const UniquePtr& other) = delete;
     UniquePtr& operator=(const UniquePtr& other) = delete;
 
+    // TODO написать для наследующихся классов
     UniquePtr(UniquePtr&& other) noexcept : ptr{other.ptr} {
         other.ptr = nullptr;
     }
